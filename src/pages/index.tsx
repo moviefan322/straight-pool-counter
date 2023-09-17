@@ -11,6 +11,8 @@ export default function Home() {
   const [rackRem, setRackRem] = useState(15);
   const [editName1, setEditName1] = useState(false);
   const [editName2, setEditName2] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [currentPlayer, setCurrentPlayer] = useState(1);
 
   const toggleEdit = () => {
     setEditName1(!editName1);
@@ -21,6 +23,18 @@ export default function Home() {
     setName(e.target.value);
   };
 
+  const incrementScore1 = () => {
+    setScore(score + 1);
+    setScoreRack(scoreRack + 1);
+    setRackRem(rackRem - 1);
+  };
+
+  const decrementScore1 = () => {
+    setScore(score - 1);
+    setScoreRack(scoreRack - 1);
+    setRackRem(rackRem + 1);
+  };
+
   const toggleEdit2 = () => {
     setEditName2(!editName2);
   };
@@ -29,6 +43,40 @@ export default function Home() {
     setName2(e.target.value);
   };
 
+  const incrementScore2 = () => {
+    setScore2(score2 + 1);
+    setScoreRack2(scoreRack2 + 1);
+    setRackRem(rackRem - 1);
+  };
+
+  const decrementScore2 = () => {
+    setScore2(score2 - 1);
+    setScoreRack2(scoreRack2 - 1);
+    setRackRem(rackRem + 1);
+  };
+
+  const rerack = (ballsRemaining: number) => {
+    toggleModal();
+    setRackRem(15);
+    setScoreRack(0);
+    setScoreRack2(0);
+    if (score !== scoreRack) setScore((score) => score + scoreRack);
+    if (score2 !== scoreRack2) setScore2((score) => score + scoreRack2);
+    if (ballsRemaining === 0) {
+      if (currentPlayer === 1) {
+        setScore(score + 1);
+      } else {
+        setScore2(score + 1);
+      }
+    }
+  };
+
+  const toggleModal = () => {
+    setShowModal(!showModal);
+    console.log(showModal);
+  };
+
+  const fifteen = scoreRack2 + scoreRack === 14;
 
   console.log(editName1);
 
@@ -55,8 +103,20 @@ export default function Home() {
           <div className="scoreTotal">{score}</div>
           <div className="bottom">
             <div className="buttons">
-              <button className="plus">+</button>
-              <button className="minus">-</button>
+              <button
+                className="plus"
+                onClick={() => incrementScore1()}
+                disabled={fifteen}
+              >
+                +
+              </button>
+              <button
+                className="minus"
+                onClick={() => decrementScore1()}
+                disabled={scoreRack === 0}
+              >
+                -
+              </button>
             </div>
             <div className="scoreRack">
               <p>{scoreRack}</p>
@@ -64,7 +124,7 @@ export default function Home() {
           </div>
         </div>
         <div className="playerbox">
-        <div className="name">
+          <div className="name">
             {!editName2 ? (
               <p>{name2} </p>
             ) : (
@@ -82,12 +142,24 @@ export default function Home() {
           </div>
           <div className="scoreTotal">{score2}</div>
           <div className="bottom">
-            <div className="scoreRack">
+            <div className="scoreRack2">
               <p>{scoreRack2}</p>
             </div>
-            <div className="buttons2">
-              <button className="plus">+</button>
-              <button className="minus">-</button>
+            <div className="buttons">
+              <button
+                className="plus"
+                onClick={() => incrementScore2()}
+                disabled={fifteen}
+              >
+                +
+              </button>
+              <button
+                className="minus"
+                onClick={() => decrementScore2()}
+                disabled={scoreRack2 === 0}
+              >
+                -
+              </button>
             </div>
           </div>
         </div>
@@ -95,6 +167,45 @@ export default function Home() {
       <div className="rackrem">
         <p>Remaining in Rack: {rackRem}</p>
       </div>
+      <div className="buttonRow">
+        <button
+          className="no-style-but custom-but"
+          onClick={() => toggleModal()}
+        >
+          Rerack
+        </button>
+        <button className="no-style-but custom-but">Miss</button>
+      </div>
+      <div className="buttonRow">
+        <button className="no-style-but custom-but">X</button>
+        <button className="no-style-but custom-but">X</button>
+      </div>
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h2>How many balls left?</h2>
+              <button className="close-button" onClick={() => toggleModal()}>
+                ×
+              </button>
+            </div>
+            <div className="modal-content">
+              <button
+                className="no-style-but custom-but"
+                onClick={() => rerack(1)}
+              >
+                1
+              </button>
+              <button
+                className="no-style-but custom-but"
+                onClick={() => rerack(0)}
+              >
+                0
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
