@@ -1,14 +1,18 @@
 body {
+  position: relative;
   background: black;
   color: white;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  z-index: 0;
 }
 
 .scorebox {
+  position: relative;
   display: flex;
   flex-direction: row;
+  z-index: -5;
 }
 
 .playerbox {
@@ -100,4 +104,10 @@ body {
 .edit {
   position: relative;
   top: 4px;
+}
+
+.rackrem {
+  text-align: center;
+  margin: auto;
+  border: white solid 1px;
 }

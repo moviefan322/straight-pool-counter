@@ -46,6 +46,9 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <div className="rackrem">
+        <p>Remaining in Rack: 0</p>
+      </div>
     </>
   );
 }
