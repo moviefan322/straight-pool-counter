@@ -21,7 +21,10 @@ body {
 }
 
 .name {
+  display: flex;
+  flex-direction: row;
   border-bottom: white solid 1px;
+  justify-content: space-around;
   height: 6vh;
   text-align: center;
   justify-self: center;
@@ -92,4 +95,9 @@ body {
   border: none;
   font-size: 40px;
   padding-top: -5px;
+}
+
+.edit {
+  position: relative;
+  top: 4px;
 }
