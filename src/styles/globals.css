@@ -1,18 +1,14 @@
 body {
-  position: relative;
   background: black;
   color: white;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  z-index: 0;
 }
 
 .scorebox {
-  position: relative;
   display: flex;
   flex-direction: row;
-  z-index: -5;
 }
 
 .playerbox {
@@ -38,7 +34,7 @@ body {
 
 .name p {
   margin: auto;
-  margin-top: 10px;
+  margin-top: 13px;
 }
 
 .scoreTotal {
@@ -110,4 +106,32 @@ body {
   text-align: center;
   margin: auto;
   border: white solid 1px;
+}
+
+.no-style-but {
+  /* Remove all default stylings */
+  background: none;
+  border: none;
+  padding: 0;
+  margin: auto;
+  font: inherit;
+  cursor: pointer;
+  outline: none;
+  color: white;
+  /* Add other styles as needed */
+}
+
+.input-reset {
+  /* Reset default styles */
+  border: none;
+  outline: none;
+  background-color: white;
+  color: black;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  padding: inherit;
+  margin: inherit;
+  width: 50%;
+  /* Add other styles as needed */
 }
