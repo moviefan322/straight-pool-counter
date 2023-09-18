@@ -38,8 +38,6 @@ export default function Home() {
     prevHighRun: { run: 0, player: "" },
   });
 
-  const fifteen = scoreRack2 + scoreRack === 14;
-
   const savePrevState = () => {
     setPrevState({
       prevScore: score,
@@ -263,7 +261,7 @@ export default function Home() {
               <button
                 className="plus"
                 onClick={() => incrementScore1()}
-                disabled={fifteen || !player1Shooting}
+                disabled={rackRem === 1 || !player1Shooting}
               >
                 +
               </button>
@@ -308,7 +306,7 @@ export default function Home() {
               <button
                 className="plus"
                 onClick={() => incrementScore2()}
-                disabled={fifteen || player1Shooting}
+                disabled={rackRem === 1 || player1Shooting}
               >
                 +
               </button>
