@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiFillEdit, AiOutlineCheck } from "react-icons/ai";
 
 export default function Home() {
