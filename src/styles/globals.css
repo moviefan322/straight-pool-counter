@@ -1,9 +1,10 @@
 body {
   background: black;
   color: white;
-  margin: 0;
   padding: 0;
   box-sizing: border-box;
+  max-width: 450px;
+  margin: auto;
 }
 
 .scorebox {
