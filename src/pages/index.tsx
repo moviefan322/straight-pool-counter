@@ -38,7 +38,7 @@ export default function Home() {
     prevHighRun: { run: 0, player: "" },
   });
 
-  const fifteen = scoreRack2 + scoreRack === 14;
+  console.log(showModal2);
 
   const savePrevState = () => {
     setPrevState({
@@ -178,27 +178,27 @@ export default function Home() {
   };
 
   const handleFoul = (amt = 1) => {
-      savePrevState();
-      setShowModal2(false); // must be before return if(firstShot)
-      if (firstShot) {
-        setFirstShot(false);
-        setShowModal2(true);
-        return;
-      }
-      if (player1Shooting) {
-        setScore(score - amt);
-        setConsecutiveFoul({
-          player1: consecutiveFoul.player1 + 1,
-          player2: consecutiveFoul.player2,
-        });
-      } else {
-        setScore2(score2 - amt);
-        setConsecutiveFoul({
-          player1: consecutiveFoul.player1,
-          player2: consecutiveFoul.player2 + 1,
-        });
-      }
-      switchPlayer();
+    savePrevState();
+    setShowModal2(false); // must be before return if(firstShot)
+    if (firstShot) {
+      setFirstShot(false);
+      setShowModal2(true);
+      return;
+    }
+    if (player1Shooting) {
+      setScore(score - amt);
+      setConsecutiveFoul({
+        player1: consecutiveFoul.player1 + 1,
+        player2: consecutiveFoul.player2,
+      });
+    } else {
+      setScore2(score2 - amt);
+      setConsecutiveFoul({
+        player1: consecutiveFoul.player1,
+        player2: consecutiveFoul.player2 + 1,
+      });
+    }
+    switchPlayer();
   };
 
   const switchPlayer = () => {
@@ -209,14 +209,14 @@ export default function Home() {
   };
 
   const checkHighRun = () => {
-      if (currentRun > highRun.run) {
-        if (player1Shooting) {
-          setHighRun({ run: currentRun, player: name });
-        } else {
-          setHighRun({ run: currentRun, player: name2 });
-        }
+    if (currentRun > highRun.run) {
+      if (player1Shooting) {
+        setHighRun({ run: currentRun, player: name });
+      } else {
+        setHighRun({ run: currentRun, player: name2 });
       }
-      setCurrentRun(0);
+    }
+    setCurrentRun(0);
   };
 
   const handleNewGame = () => {
@@ -263,7 +263,7 @@ export default function Home() {
               <button
                 className="plus"
                 onClick={() => incrementScore1()}
-                disabled={fifteen || !player1Shooting}
+                disabled={rackRem === 1 || !player1Shooting}
               >
                 +
               </button>
@@ -308,7 +308,7 @@ export default function Home() {
               <button
                 className="plus"
                 onClick={() => incrementScore2()}
-                disabled={fifteen || player1Shooting}
+                disabled={rackRem === 1 || player1Shooting}
               >
                 +
               </button>
