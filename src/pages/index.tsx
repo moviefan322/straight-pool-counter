@@ -1,4 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { debug } from "console";
+import { set } from "mongoose";
 import { useEffect, useState } from "react";
 import { AiFillEdit, AiOutlineCheck } from "react-icons/ai";
 
@@ -51,6 +53,17 @@ export default function Home() {
     });
   };
 
+  const restorePrevState = () => {
+    setScore(prevState.prevScore);
+    setScore2(prevState.prevScore2);
+    setScoreRack(prevState.prevScoreRack);
+    setScoreRack2(prevState.prevScoreRack2);
+    setRackRem(prevState.prevRackRem);
+    setPlayer1Shooting(prevState.prevPlayer1Shooting);
+    setCurrentRun(prevState.prevCurrentRun);
+    setHighRun(prevState.prevHighRun);
+  };
+
   useEffect(() => {
     if (consecutiveFoul.player1 === 3) {
       savePrevState();
@@ -66,16 +79,11 @@ export default function Home() {
     }
   }, [consecutiveFoul, score, score2, prevState, setScore, setScore2]);
 
-  const restorePrevState = () => {
-    setScore(prevState.prevScore);
-    setScore2(prevState.prevScore2);
-    setScoreRack(prevState.prevScoreRack);
-    setScoreRack2(prevState.prevScoreRack2);
-    setRackRem(prevState.prevRackRem);
-    setPlayer1Shooting(prevState.prevPlayer1Shooting);
-    setCurrentRun(prevState.prevCurrentRun);
-    setHighRun(prevState.prevHighRun);
-  };
+  useEffect(() => {
+    if (rackRem === 1) {
+      setShowModal(true);
+    }
+  }, [rackRem, rerack]);
 
   useEffect(() => {
     if (player1Shooting) {
@@ -97,6 +105,7 @@ export default function Home() {
   };
 
   const incrementScore1 = () => {
+    firstShot && setFirstShot(false);
     savePrevState();
     setScore(score + 1);
     setScoreRack(scoreRack + 1);
@@ -136,23 +145,24 @@ export default function Home() {
     setCurrentRun(currentRun - 1);
   };
 
-  const rerack = (ballsRemaining: number) => {
+  function rerack(ballsRemaining: number) {
+    firstShot && setFirstShot(false);
     savePrevState();
     if (rackNo === 1) {
       if (player1Shooting) {
-        setScore(15 - ballsRemaining - scoreRack2);
-        setCurrentRun(currentRun + (15 - ballsRemaining - scoreRack2));
+        setScore((prev) => prev + (rackRem - ballsRemaining - scoreRack2));
+        setCurrentRun((prev) => prev + (rackRem - ballsRemaining - scoreRack2));
       } else {
-        setScore2(15 - ballsRemaining - scoreRack);
-        setCurrentRun(currentRun + (15 - ballsRemaining - scoreRack));
+        setScore2((prev) => prev + (rackRem - ballsRemaining - scoreRack));
+        setCurrentRun((prev) => prev + (rackRem - ballsRemaining - scoreRack));
       }
     } else {
       if (player1Shooting) {
-        setScore(score + (15 - ballsRemaining - scoreRack2));
-        setCurrentRun(currentRun + (15 - ballsRemaining - scoreRack2));
+        setScore((prev) => prev + (rackRem - ballsRemaining - scoreRack2));
+        setCurrentRun((prev) => prev + (rackRem - ballsRemaining - scoreRack2));
       } else {
-        setScore2(score2 + (15 - ballsRemaining - scoreRack));
-        setCurrentRun(currentRun + (15 - ballsRemaining - scoreRack));
+        setScore2((prev) => prev + (rackRem - ballsRemaining - scoreRack));
+        setCurrentRun((prev) => prev + (rackRem - ballsRemaining - scoreRack));
       }
     }
     toggleModal();
@@ -160,7 +170,7 @@ export default function Home() {
     setRackNo(rackNo + 1);
     setScoreRack(0);
     setScoreRack2(0);
-  };
+  }
 
   const toggleModal = () => {
     setShowModal(!showModal);
@@ -168,42 +178,45 @@ export default function Home() {
   };
 
   const handleFoul = (amt = 1) => {
-    savePrevState();
-    setShowModal2(false);
-    if (firstShot) {
-      setFirstShot(false);
-      setShowModal2(true);
-      return;
-    }
-
-    if (player1Shooting) {
-      setScore(score - amt);
-      setPlayer1Shooting(false);
-      setConsecutiveFoul({
-        player1: consecutiveFoul.player1 + 1,
-        player2: consecutiveFoul.player2,
-      });
-    } else {
-      setScore2(score2 - amt);
-      setPlayer1Shooting(true);
-      setConsecutiveFoul({
-        player1: consecutiveFoul.player1,
-        player2: consecutiveFoul.player2 + 1,
-      });
-    }
+      savePrevState();
+      setShowModal2(false); // must be before return if(firstShot)
+      if (firstShot) {
+        setFirstShot(false);
+        setShowModal2(true);
+        return;
+      }
+      if (player1Shooting) {
+        setScore(score - amt);
+        setConsecutiveFoul({
+          player1: consecutiveFoul.player1 + 1,
+          player2: consecutiveFoul.player2,
+        });
+      } else {
+        setScore2(score2 - amt);
+        setConsecutiveFoul({
+          player1: consecutiveFoul.player1,
+          player2: consecutiveFoul.player2 + 1,
+        });
+      }
+      switchPlayer();
   };
 
   const switchPlayer = () => {
+    firstShot && setFirstShot(false);
     savePrevState();
+    checkHighRun();
     setPlayer1Shooting(!player1Shooting);
-    if (currentRun > highRun.run) {
-      if (player1Shooting) {
-        setHighRun({ run: currentRun, player: name });
-      } else {
-        setHighRun({ run: currentRun, player: name2 });
+  };
+
+  const checkHighRun = () => {
+      if (currentRun > highRun.run) {
+        if (player1Shooting) {
+          setHighRun({ run: currentRun, player: name });
+        } else {
+          setHighRun({ run: currentRun, player: name2 });
+        }
       }
-    }
-    setCurrentRun(0);
+      setCurrentRun(0);
   };
 
   const handleNewGame = () => {
