@@ -361,7 +361,7 @@ export default function Home() {
       <div className="buttonRow">
         <button
           className="no-style-but custom-but"
-          onClick={() => switchPlayer()}
+          onClick={() => handleMiss()}
         >
           Safety
         </button>
