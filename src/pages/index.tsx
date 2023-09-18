@@ -148,19 +148,19 @@ export default function Home() {
     savePrevState();
     if (rackNo === 1) {
       if (player1Shooting) {
-        setScore((prev) => prev + (rackRem - ballsRemaining - scoreRack2));
-        setCurrentRun((prev) => prev + (rackRem - ballsRemaining - scoreRack2));
+        setScore(score + (rackRem - ballsRemaining));
+        setCurrentRun(currentRun + (rackRem - ballsRemaining));
       } else {
-        setScore2((prev) => prev + (rackRem - ballsRemaining - scoreRack));
-        setCurrentRun((prev) => prev + (rackRem - ballsRemaining - scoreRack));
+        setScore2(score2 + (rackRem - ballsRemaining));
+        setCurrentRun(currentRun + (rackRem - ballsRemaining));
       }
     } else {
       if (player1Shooting) {
-        setScore((prev) => prev + (rackRem - ballsRemaining - scoreRack2));
-        setCurrentRun((prev) => prev + (rackRem - ballsRemaining - scoreRack2));
+        setScore(score + (rackRem - ballsRemaining));
+        setCurrentRun(currentRun + (rackRem - ballsRemaining));
       } else {
-        setScore2((prev) => prev + (rackRem - ballsRemaining - scoreRack));
-        setCurrentRun((prev) => prev + (rackRem - ballsRemaining - scoreRack));
+        setScore2(score2 + (rackRem - ballsRemaining));
+        setCurrentRun(currentRun + (rackRem - ballsRemaining));
       }
     }
     toggleModal();
