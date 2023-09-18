@@ -1,6 +1,7 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-}
+import type { Config } from "jest";
 
-module.exports = nextConfig
+const config: Config = {
+  verbose: true,
+};
+
+export default config;
