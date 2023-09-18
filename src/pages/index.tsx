@@ -199,6 +199,15 @@ export default function Home() {
     switchPlayer();
   };
 
+  const handleMiss = () => {
+    if (player1Shooting) {
+      consecutiveFoul.player1 === 0;
+    } else {
+      consecutiveFoul.player2 === 0;
+    }
+    switchPlayer();
+  };
+
   const switchPlayer = () => {
     firstShot && setFirstShot(false);
     savePrevState();
@@ -344,7 +353,7 @@ export default function Home() {
         </button>
         <button
           className="no-style-but custom-but"
-          onClick={() => switchPlayer()}
+          onClick={() => handleMiss()}
         >
           Miss
         </button>
