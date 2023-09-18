@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiFillEdit, AiOutlineCheck } from "react-icons/ai";
 
 export default function Home() {
@@ -12,7 +12,19 @@ export default function Home() {
   const [editName1, setEditName1] = useState(false);
   const [editName2, setEditName2] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [currentPlayer, setCurrentPlayer] = useState(1);
+  const [player1Shooting, setPlayer1Shooting] = useState(true);
+  const [scoreStyle, setScoreStyle] = useState("rgb(6, 126, 254)");
+  const [scoreStyle2, setScoreStyle2] = useState("black");
+
+  useEffect(() => {
+    if (player1Shooting) {
+      setScoreStyle("rgb(6, 126, 254)");
+      setScoreStyle2("black");
+    } else {
+      setScoreStyle("black");
+      setScoreStyle2("rgb(6, 126, 254)");
+    }
+  }, [player1Shooting, scoreStyle, scoreStyle2]);
 
   const toggleEdit = () => {
     setEditName1(!editName1);
@@ -63,7 +75,7 @@ export default function Home() {
     if (score !== scoreRack) setScore((score) => score + scoreRack);
     if (score2 !== scoreRack2) setScore2((score) => score + scoreRack2);
     if (ballsRemaining === 0) {
-      if (currentPlayer === 1) {
+      if (player1Shooting) {
         setScore(score + 1);
       } else {
         setScore2(score + 1);
@@ -100,20 +112,22 @@ export default function Home() {
               {!editName1 ? <AiFillEdit /> : <AiOutlineCheck />}
             </button>
           </div>
-          <div className="scoreTotal">{score}</div>
+          <div className="scoreTotal" style={{ backgroundColor: scoreStyle }}>
+            {score}
+          </div>
           <div className="bottom">
             <div className="buttons">
               <button
                 className="plus"
                 onClick={() => incrementScore1()}
-                disabled={fifteen}
+                disabled={fifteen || !player1Shooting}
               >
                 +
               </button>
               <button
                 className="minus"
                 onClick={() => decrementScore1()}
-                disabled={scoreRack === 0}
+                disabled={scoreRack === 0 || !player1Shooting}
               >
                 -
               </button>
@@ -140,7 +154,9 @@ export default function Home() {
               {!editName2 ? <AiFillEdit /> : <AiOutlineCheck />}
             </button>
           </div>
-          <div className="scoreTotal">{score2}</div>
+          <div className="scoreTotal" style={{ backgroundColor: scoreStyle2 }}>
+            {score2}
+          </div>
           <div className="bottom">
             <div className="scoreRack2">
               <p>{scoreRack2}</p>
@@ -149,14 +165,14 @@ export default function Home() {
               <button
                 className="plus"
                 onClick={() => incrementScore2()}
-                disabled={fifteen}
+                disabled={fifteen || player1Shooting}
               >
                 +
               </button>
               <button
                 className="minus"
                 onClick={() => decrementScore2()}
-                disabled={scoreRack2 === 0}
+                disabled={scoreRack2 === 0 || player1Shooting}
               >
                 -
               </button>
@@ -174,12 +190,18 @@ export default function Home() {
         >
           Rerack
         </button>
-        <button className="no-style-but custom-but">Miss</button>
+        <button
+          className="no-style-but custom-but"
+          onClick={() => setPlayer1Shooting(!player1Shooting)}
+        >
+          Miss
+        </button>
       </div>
       <div className="buttonRow">
         <button className="no-style-but custom-but">X</button>
         <button className="no-style-but custom-but">X</button>
       </div>
+
       {showModal && (
         <div className="modal-overlay">
           <div className="modal">

@@ -40,6 +40,8 @@ body {
 .scoreTotal {
   text-align: center;
   font-size: 60px;
+  height: 100%;
+  padding-top: 35%;
 }
 
 .scoreRack {
