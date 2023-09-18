@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { set } from "mongoose";
 import { useEffect, useState } from "react";
 import { AiFillEdit, AiOutlineCheck } from "react-icons/ai";
 
 export default function Home() {
   const [rackNo, setRackNo] = useState(1);
+  const [firstShot, setFirstShot] = useState(true);
   const [score, setScore] = useState(0);
   const [score2, setScore2] = useState(0);
   const [scoreRack, setScoreRack] = useState(0);
@@ -14,7 +16,7 @@ export default function Home() {
   const [editName1, setEditName1] = useState(false);
   const [editName2, setEditName2] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [showModal2, setShowModal2] = useState(true);
+  const [showModal2, setShowModal2] = useState(false);
   const [player1Shooting, setPlayer1Shooting] = useState(true);
   const [scoreStyle, setScoreStyle] = useState("rgb(6, 126, 254)");
   const [scoreStyle2, setScoreStyle2] = useState("black");
@@ -167,10 +169,14 @@ export default function Home() {
   };
 
   const handleFoul = (amt = 1) => {
-    if (showModal2) {
-      setShowModal2(false);
-    }
     savePrevState();
+    setShowModal2(false);
+    if (firstShot) {
+      setFirstShot(false);
+      setShowModal2(true);
+      return;
+    }
+
     if (player1Shooting) {
       setScore(score - amt);
       setPlayer1Shooting(false);
