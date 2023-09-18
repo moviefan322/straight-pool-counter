@@ -14,6 +14,7 @@ export default function Home() {
   const [editName1, setEditName1] = useState(false);
   const [editName2, setEditName2] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showModal2, setShowModal2] = useState(true);
   const [player1Shooting, setPlayer1Shooting] = useState(true);
   const [scoreStyle, setScoreStyle] = useState("rgb(6, 126, 254)");
   const [scoreStyle2, setScoreStyle2] = useState("black");
@@ -165,17 +166,20 @@ export default function Home() {
     console.log(showModal);
   };
 
-  const handleFoul = () => {
+  const handleFoul = (amt = 1) => {
+    if (showModal2) {
+      setShowModal2(false);
+    }
     savePrevState();
     if (player1Shooting) {
-      setScore(score - 1);
+      setScore(score - amt);
       setPlayer1Shooting(false);
       setConsecutiveFoul({
         player1: consecutiveFoul.player1 + 1,
         player2: consecutiveFoul.player2,
       });
     } else {
-      setScore2(score2 - 1);
+      setScore2(score2 - amt);
       setPlayer1Shooting(true);
       setConsecutiveFoul({
         player1: consecutiveFoul.player1,
@@ -376,6 +380,27 @@ export default function Home() {
                 onClick={() => rerack(0)}
               >
                 0
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showModal2 && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-content">
+              <button
+                className="no-style-but custom-but"
+                onClick={() => handleFoul(2)}
+              >
+                Illegal Break
+              </button>
+              <button
+                className="no-style-but custom-but"
+                onClick={() => handleFoul()}
+              >
+                Standard Foul
               </button>
             </div>
           </div>
