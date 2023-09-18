@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { set } from "mongoose";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AiFillEdit, AiOutlineCheck } from "react-icons/ai";
 
 export default function Home() {
