@@ -36,8 +36,6 @@ export default function Home() {
     prevHighRun: { run: 0, player: "" },
   });
 
-  console.log(showModal2);
-
   const savePrevState = () => {
     setPrevState({
       prevScore: score,
