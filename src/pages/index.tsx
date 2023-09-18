@@ -1,5 +1,5 @@
 import { set } from "mongoose";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { AiFillEdit, AiOutlineCheck } from "react-icons/ai";
 
 export default function Home() {
@@ -19,6 +19,61 @@ export default function Home() {
   const [scoreStyle2, setScoreStyle2] = useState("black");
   const [currentRun, setCurrentRun] = useState(0);
   const [highRun, setHighRun] = useState({ run: 0, player: "" });
+  const [consecutiveFoul, setConsecutiveFoul] = useState({
+    player1: 0,
+    player2: 0,
+  });
+  const [prevState, setPrevState] = useState({
+    prevScore: 0,
+    prevScore2: 0,
+    prevScoreRack: 0,
+    prevScoreRack2: 0,
+    prevRackRem: 15,
+    prevPlayer1Shooting: true,
+    prevCurrentRun: 0,
+    prevHighRun: { run: 0, player: "" },
+  });
+
+  const fifteen = scoreRack2 + scoreRack === 14;
+
+  const savePrevState = () => {
+    setPrevState({
+      prevScore: score,
+      prevScore2: score2,
+      prevScoreRack: scoreRack,
+      prevScoreRack2: scoreRack2,
+      prevRackRem: rackRem,
+      prevPlayer1Shooting: player1Shooting,
+      prevCurrentRun: currentRun,
+      prevHighRun: highRun,
+    });
+  };
+
+  useEffect(() => {
+    if (consecutiveFoul.player1 === 3) {
+      savePrevState();
+      setScore(score - 15);
+      setPlayer1Shooting(false);
+      setConsecutiveFoul({ player1: 0, player2: consecutiveFoul.player2 });
+    }
+    if (consecutiveFoul.player2 === 3) {
+      savePrevState();
+      setScore2(score2 - 15);
+      setPlayer1Shooting(true);
+      setConsecutiveFoul({ player1: consecutiveFoul.player1, player2: 0 });
+    }
+  }, [consecutiveFoul, score, score2, prevState, setScore, setScore2]);
+
+  const restorePrevState = () => {
+    setScore(prevState.prevScore);
+    setScore2(prevState.prevScore2);
+    setScoreRack(prevState.prevScoreRack);
+    setScoreRack2(prevState.prevScoreRack2);
+    setRackRem(prevState.prevRackRem);
+    setPlayer1Shooting(prevState.prevPlayer1Shooting);
+    setCurrentRun(prevState.prevCurrentRun);
+    setHighRun(prevState.prevHighRun);
+  };
 
   useEffect(() => {
     if (player1Shooting) {
@@ -40,6 +95,7 @@ export default function Home() {
   };
 
   const incrementScore1 = () => {
+    savePrevState();
     setScore(score + 1);
     setScoreRack(scoreRack + 1);
     setRackRem(rackRem - 1);
@@ -47,6 +103,7 @@ export default function Home() {
   };
 
   const decrementScore1 = () => {
+    savePrevState();
     setScore(score - 1);
     setScoreRack(scoreRack - 1);
     setRackRem(rackRem + 1);
@@ -62,6 +119,7 @@ export default function Home() {
   };
 
   const incrementScore2 = () => {
+    savePrevState();
     setScore2(score2 + 1);
     setScoreRack2(scoreRack2 + 1);
     setRackRem(rackRem - 1);
@@ -69,6 +127,7 @@ export default function Home() {
   };
 
   const decrementScore2 = () => {
+    savePrevState();
     setScore2(score2 - 1);
     setScoreRack2(scoreRack2 - 1);
     setRackRem(rackRem + 1);
@@ -76,6 +135,7 @@ export default function Home() {
   };
 
   const rerack = (ballsRemaining: number) => {
+    savePrevState();
     if (rackNo === 1) {
       if (player1Shooting) {
         setScore(15 - ballsRemaining - scoreRack2);
@@ -106,16 +166,26 @@ export default function Home() {
   };
 
   const handleFoul = () => {
+    savePrevState();
     if (player1Shooting) {
       setScore(score - 1);
       setPlayer1Shooting(false);
+      setConsecutiveFoul({
+        player1: consecutiveFoul.player1 + 1,
+        player2: consecutiveFoul.player2,
+      });
     } else {
       setScore2(score2 - 1);
       setPlayer1Shooting(true);
+      setConsecutiveFoul({
+        player1: consecutiveFoul.player1,
+        player2: consecutiveFoul.player2 + 1,
+      });
     }
   };
 
   const switchPlayer = () => {
+    savePrevState();
     setPlayer1Shooting(!player1Shooting);
     if (currentRun > highRun.run) {
       if (player1Shooting) {
@@ -128,6 +198,7 @@ export default function Home() {
   };
 
   const handleNewGame = () => {
+    savePrevState();
     setScore(0);
     setScore2(0);
     setScoreRack(0);
@@ -138,10 +209,6 @@ export default function Home() {
     setCurrentRun(0);
     setHighRun({ run: 0, player: "" });
   };
-
-  const fifteen = scoreRack2 + scoreRack === 14;
-
-  console.log(editName1);
 
   return (
     <>
@@ -282,7 +349,7 @@ export default function Home() {
         </button>
         <button
           className="no-style-but custom-but"
-          onClick={() => handleFoul()}
+          onClick={() => restorePrevState()}
         >
           Undo
         </button>
