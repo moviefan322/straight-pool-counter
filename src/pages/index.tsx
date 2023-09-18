@@ -1,7 +1,9 @@
+import { set } from "mongoose";
 import { useEffect, useState } from "react";
 import { AiFillEdit, AiOutlineCheck } from "react-icons/ai";
 
 export default function Home() {
+  const [rackNo, setRackNo] = useState(1);
   const [score, setScore] = useState(0);
   const [score2, setScore2] = useState(0);
   const [scoreRack, setScoreRack] = useState(0);
@@ -16,7 +18,7 @@ export default function Home() {
   const [scoreStyle, setScoreStyle] = useState("rgb(6, 126, 254)");
   const [scoreStyle2, setScoreStyle2] = useState("black");
   const [currentRun, setCurrentRun] = useState(0);
-  const [highRun, setHighRun] = useState(0);
+  const [highRun, setHighRun] = useState({ run: 0, player: "" });
 
   useEffect(() => {
     if (player1Shooting) {
@@ -41,12 +43,14 @@ export default function Home() {
     setScore(score + 1);
     setScoreRack(scoreRack + 1);
     setRackRem(rackRem - 1);
+    setCurrentRun(currentRun + 1);
   };
 
   const decrementScore1 = () => {
     setScore(score - 1);
     setScoreRack(scoreRack - 1);
     setRackRem(rackRem + 1);
+    setCurrentRun(currentRun - 1);
   };
 
   const toggleEdit2 = () => {
@@ -61,36 +65,39 @@ export default function Home() {
     setScore2(score2 + 1);
     setScoreRack2(scoreRack2 + 1);
     setRackRem(rackRem - 1);
+    setCurrentRun(currentRun + 1);
   };
 
   const decrementScore2 = () => {
     setScore2(score2 - 1);
     setScoreRack2(scoreRack2 - 1);
     setRackRem(rackRem + 1);
+    setCurrentRun(currentRun - 1);
   };
 
   const rerack = (ballsRemaining: number) => {
-    if (ballsRemaining < rackRem) {
+    if (rackNo === 1) {
       if (player1Shooting) {
-        if (score !== scoreRack) {
-          setScore(score + 15 - (scoreRack2 + ballsRemaining));
-        } else {
-          setScore(15 - (scoreRack2 + ballsRemaining));
-        }
+        setScore(15 - ballsRemaining - scoreRack2);
+        setCurrentRun(currentRun + (15 - ballsRemaining - scoreRack2));
       } else {
-        if (score2 !== scoreRack2) {
-          setScore2(score2 + 15 - (scoreRack + ballsRemaining));
-        } else {
-          setScore2(15 - (scoreRack + ballsRemaining));
-        }
+        setScore2(15 - ballsRemaining - scoreRack);
+        setCurrentRun(currentRun + (15 - ballsRemaining - scoreRack));
+      }
+    } else {
+      if (player1Shooting) {
+        setScore(score + (15 - ballsRemaining - scoreRack2));
+        setCurrentRun(currentRun + (15 - ballsRemaining - scoreRack2));
+      } else {
+        setScore2(score2 + (15 - ballsRemaining - scoreRack));
+        setCurrentRun(currentRun + (15 - ballsRemaining - scoreRack));
       }
     }
     toggleModal();
     setRackRem(15);
+    setRackNo(rackNo + 1);
     setScoreRack(0);
     setScoreRack2(0);
-    if (score !== scoreRack) setScore((score) => score + scoreRack);
-    if (score2 !== scoreRack2) setScore2((score) => score + scoreRack2);
   };
 
   const toggleModal = () => {
@@ -106,6 +113,30 @@ export default function Home() {
       setScore2(score2 - 1);
       setPlayer1Shooting(true);
     }
+  };
+
+  const switchPlayer = () => {
+    setPlayer1Shooting(!player1Shooting);
+    if (currentRun > highRun.run) {
+      if (player1Shooting) {
+        setHighRun({ run: currentRun, player: name });
+      } else {
+        setHighRun({ run: currentRun, player: name2 });
+      }
+    }
+    setCurrentRun(0);
+  };
+
+  const handleNewGame = () => {
+    setScore(0);
+    setScore2(0);
+    setScoreRack(0);
+    setScoreRack2(0);
+    setRackNo(1);
+    setRackRem(15);
+    setPlayer1Shooting(true);
+    setCurrentRun(0);
+    setHighRun({ run: 0, player: "" });
   };
 
   const fifteen = scoreRack2 + scoreRack === 14;
@@ -203,6 +234,17 @@ export default function Home() {
       <div className="rackrem">
         <p>Remaining in Rack: {rackRem}</p>
       </div>
+      <div
+        className="rackrem"
+        style={highRun.run === 0 ? { display: "none" } : {}}
+      >
+        <p>
+          High Run: {highRun.run} ({highRun.player})
+        </p>
+      </div>
+      <div className="rackrem">
+        <p>Current Run: {currentRun}</p>
+      </div>
       <div className="buttonRow">
         <button
           className="no-style-but custom-but"
@@ -212,7 +254,7 @@ export default function Home() {
         </button>
         <button
           className="no-style-but custom-but"
-          onClick={() => setPlayer1Shooting(!player1Shooting)}
+          onClick={() => switchPlayer()}
         >
           Miss
         </button>
@@ -220,7 +262,7 @@ export default function Home() {
       <div className="buttonRow">
         <button
           className="no-style-but custom-but"
-          onClick={() => setPlayer1Shooting(!player1Shooting)}
+          onClick={() => switchPlayer()}
         >
           Safety
         </button>
@@ -229,6 +271,20 @@ export default function Home() {
           onClick={() => handleFoul()}
         >
           Foul
+        </button>
+      </div>
+      <div className="buttonRow">
+        <button
+          className="no-style-but custom-but"
+          onClick={() => handleNewGame()}
+        >
+          New Game
+        </button>
+        <button
+          className="no-style-but custom-but"
+          onClick={() => handleFoul()}
+        >
+          Undo
         </button>
       </div>
 
