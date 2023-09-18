@@ -15,6 +15,8 @@ export default function Home() {
   const [player1Shooting, setPlayer1Shooting] = useState(true);
   const [scoreStyle, setScoreStyle] = useState("rgb(6, 126, 254)");
   const [scoreStyle2, setScoreStyle2] = useState("black");
+  const [currentRun, setCurrentRun] = useState(0);
+  const [highRun, setHighRun] = useState(0);
 
   useEffect(() => {
     if (player1Shooting) {
@@ -68,24 +70,42 @@ export default function Home() {
   };
 
   const rerack = (ballsRemaining: number) => {
+    if (ballsRemaining < rackRem) {
+      if (player1Shooting) {
+        if (score !== scoreRack) {
+          setScore(score + 15 - (scoreRack2 + ballsRemaining));
+        } else {
+          setScore(15 - (scoreRack2 + ballsRemaining));
+        }
+      } else {
+        if (score2 !== scoreRack2) {
+          setScore2(score2 + 15 - (scoreRack + ballsRemaining));
+        } else {
+          setScore2(15 - (scoreRack + ballsRemaining));
+        }
+      }
+    }
     toggleModal();
     setRackRem(15);
     setScoreRack(0);
     setScoreRack2(0);
     if (score !== scoreRack) setScore((score) => score + scoreRack);
     if (score2 !== scoreRack2) setScore2((score) => score + scoreRack2);
-    if (ballsRemaining === 0) {
-      if (player1Shooting) {
-        setScore(score + 1);
-      } else {
-        setScore2(score + 1);
-      }
-    }
   };
 
   const toggleModal = () => {
     setShowModal(!showModal);
     console.log(showModal);
+  };
+
+  const handleFoul = () => {
+    if (player1Shooting) {
+      setScore(score - 1);
+      setPlayer1Shooting(false);
+    } else {
+      setScore2(score2 - 1);
+      setPlayer1Shooting(true);
+    }
   };
 
   const fifteen = scoreRack2 + scoreRack === 14;
@@ -198,8 +218,18 @@ export default function Home() {
         </button>
       </div>
       <div className="buttonRow">
-        <button className="no-style-but custom-but">X</button>
-        <button className="no-style-but custom-but">X</button>
+        <button
+          className="no-style-but custom-but"
+          onClick={() => setPlayer1Shooting(!player1Shooting)}
+        >
+          Safety
+        </button>
+        <button
+          className="no-style-but custom-but"
+          onClick={() => handleFoul()}
+        >
+          Foul
+        </button>
       </div>
 
       {showModal && (
