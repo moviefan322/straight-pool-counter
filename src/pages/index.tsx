@@ -217,7 +217,7 @@ export default function Home() {
   return (
     <>
       <div className="header">
-        <h1>14.1 Scorecard</h1>
+        <h2>14.1 Scorecard</h2>
       </div>
       <div className="scorebox">
         <div className="playerbox">
