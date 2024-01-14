@@ -1,16 +1,6 @@
 
 # 14.1 Scorecard [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Table of Contents
-
-### [Description](#Description)
-### [Installation](#Installation)
-### [Usage](#Usage)
-### [Testing](#Testing)
-### [Contributors](#Contributors)
-### [License](#License)
-### [Questions](#Questions)
-
 <img src="./public/readmeimg.png" alt="Screenshot of webpage" width="400" style="margin: auto">
 
 ## Description
@@ -24,8 +14,6 @@ No installation necessary, simply navigate to https://straight-pool-counter-mms5
 ## Usage
     
 The layout is fairly intuitive, you can customize player names, and simply keep track of the balls as you go    
-
-![Screenshot of webpage](./Develop/assets/images/screenshot.png)
  
 ## Testing
 
