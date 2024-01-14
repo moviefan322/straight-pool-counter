@@ -11,7 +11,7 @@
 ### [License](#License)
 ### [Questions](#Questions)
 
-<img src="./client/public/readmeimg.png" alt="Screenshot of webpage" width="400" style="margin: auto">
+<img src="./public/readmeimg.png" alt="Screenshot of webpage" width="400" style="margin: auto">
 
 ## Description
     
