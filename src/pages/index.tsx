@@ -100,6 +100,14 @@ export default function Home() {
     setName(e.target.value);
   };
 
+  const clearFoul = () => {
+    if (player1Shooting) {
+      setConsecutiveFoul({ player1: 0, player2: consecutiveFoul.player2 });
+    } else {
+      setConsecutiveFoul({ player1: consecutiveFoul.player1, player2: 0 });
+    }
+  };
+
   const incrementScore1 = () => {
     firstShot && setFirstShot(false);
     savePrevState();
@@ -107,6 +115,7 @@ export default function Home() {
     setScoreRack(scoreRack + 1);
     setRackRem(rackRem - 1);
     setCurrentRun(currentRun + 1);
+    clearFoul();
   };
 
   const decrementScore1 = () => {
@@ -115,6 +124,7 @@ export default function Home() {
     setScoreRack(scoreRack - 1);
     setRackRem(rackRem + 1);
     setCurrentRun(currentRun - 1);
+    clearFoul();
   };
 
   const toggleEdit2 = () => {
@@ -198,11 +208,7 @@ export default function Home() {
   };
 
   const handleMiss = () => {
-    if (player1Shooting) {
-      consecutiveFoul.player1 === 0;
-    } else {
-      consecutiveFoul.player2 === 0;
-    }
+    clearFoul();
     switchPlayer();
   };
 
@@ -261,6 +267,8 @@ export default function Home() {
             </button>
           </div>
           <div className="scoreTotal" style={{ backgroundColor: scoreStyle }}>
+            {consecutiveFoul.player1 === 1 && <p className="foulCount">X</p>}
+            {consecutiveFoul.player1 === 2 && <p className="foulCount">XX</p>}
             {score}
           </div>
           <div className="bottom">
@@ -303,6 +311,8 @@ export default function Home() {
             </button>
           </div>
           <div className="scoreTotal" style={{ backgroundColor: scoreStyle2 }}>
+            {consecutiveFoul.player2 === 1 && <p className="foulCount">X</p>}
+            {consecutiveFoul.player2 === 2 && <p className="foulCount">XX</p>}
             {score2}
           </div>
           <div className="bottom">

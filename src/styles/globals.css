@@ -39,10 +39,15 @@ body {
 }
 
 .scoreTotal {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
   text-align: center;
   font-size: 60px;
   height: 100%;
-  padding-top: 35%;
+  margin: 0;
 }
 
 .scoreRack {
@@ -225,4 +230,14 @@ body {
   color: black;
   padding: 0.3rem;
   border: rgb(0, 0, 0) 4px dashed;
+}
+
+.foulCount {
+  position: absolute;
+  top: 0;
+  left: 10%;
+  font-size: 20px;
+  color: red;
+  border: red 2px dashed;
+  padding: .2rem;
 }
