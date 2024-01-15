@@ -24,7 +24,7 @@ Just I
 
 ## License
 
-This is a simple application designed to keep score for 14.1/straight pool. If you find yourself playing on a table without any way to keep score, fire up this nifty app!
+MIT License
 
 ## Questions
 
